@@ -31,5 +31,28 @@ export default {
       method: 'post',
       data: role
     })
-  }
+  },
+  //获取角色
+  getById(id) {
+    return request({
+      url: `${api_name}/get/${id}`,
+      method: 'get'
+    })
+  },
+//修改
+  updateById(role) {
+    return request({
+      url: `${api_name}/update`,
+      method: 'put',
+      data: role
+    })
+  },
+      // 批量删除
+      batchRemove (idList) {
+        return request({
+          url: `${api_name}/batchRemove`,
+          method: `delete`,
+          data: idList
+        })
+      },
 }

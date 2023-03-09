@@ -28,6 +28,9 @@
                        icon="el-icon-plus"
                        size="mini"
                        @click="add">添 加</el-button>
+            <el-button class="btn-add"
+                       size="mini"
+                       @click="batchRemove()">批量删除</el-button>
 
           </el-row>
         </div>
@@ -126,17 +129,30 @@ export default {
       searchObj: {},// 查询条件
       multipleSelection: [],// 批量删除选中的记录列表
 
+      listLoading: true,
       dialogVisible: false,//是否弹框
       sysRole: {},
-      saveBtnDisabled: false
+      saveBtnDisabled: false,
+      loading: false
     }
   },
   // 页面渲染成功后获取数据
   created () {
     this.fetchData()
+    this.listLoading = false
   },
   // 定义方法
   methods: {
+    edit (id) {
+      this.dialogVisible = true
+      this.fetchDataById(id)
+    },
+
+    fetchDataById (id) {
+      api.getById(id).then(response => {
+        this.sysRole = response.data
+      })
+    },
     //点击弹出添加角色框
     add () {
       this.dialogVisible = true
@@ -159,14 +175,20 @@ export default {
       })
     },
     updateData () {
-
+      api.updateById(this.sysRole).then(response => {
+        this.$message.success(response.message || '操作成功')
+        this.dialogVisible = false
+        this.fetchData(this.page)
+      })
     },
     fetchData (current = 1) {
       this.page = current
+      this.loading = true
       // 调用api
       api.getPageList(this.page, this.limit, this.searchObj).then(response => {
         this.list = response.data.records
         this.total = response.data.total
+        this.loading = false
       })
     },
     // 根据id删除数据
@@ -183,7 +205,38 @@ export default {
         this.fetchData(this.page)
         this.$message.success(response.message || '删除成功')
       })
+    },// 当多选选项发生变化的时候调用
+    handleSelectionChange (selection) {
+      // console.log(selection)
+      this.multipleSelection = selection
     },
+    // 批量删除
+    batchRemove () {
+      if (this.multipleSelection.length === 0) {
+        this.$message.warning('请选择要删除的记录！')
+        return
+      }
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 点击确定，远程调用ajax
+        // 遍历selection，将id取出放入id列表
+        var idList = []
+        this.multipleSelection.forEach(item => {
+          idList.push(item.id)
+        })
+        // 调用api
+        return api.batchRemove(idList)
+      }).then((response) => {
+        this.fetchData(this.page)
+        this.$message.success(response.message)
+      })
+    },
+    resetData () {
+      this.fetchData(this.page)
+    }
 
   }
 }
