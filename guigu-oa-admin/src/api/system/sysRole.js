@@ -16,5 +16,12 @@ export default {
       method: 'get',
       params: searchObj
     })
+  },
+  //角色删除
+  removeById(id) {
+    return request({
+      url: `${api_name}/remove/${id}`,
+      method: 'delete'
+    })
   }
 }
