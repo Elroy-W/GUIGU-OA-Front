@@ -23,5 +23,13 @@ export default {
       url: `${api_name}/remove/${id}`,
       method: 'delete'
     })
+  },
+  //添加角色
+  save(role) {
+    return request({
+      url: `${api_name}/save`,
+      method: 'post',
+      data: role
+    })
   }
 }

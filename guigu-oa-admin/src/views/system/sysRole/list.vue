@@ -13,16 +13,24 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row style="display:flex">
-          <el-button type="primary"
-                     icon="el-icon-search"
-                     size="mini"
-                     :loading="loading"
-                     @click="fetchData()">搜索</el-button>
-          <el-button icon="el-icon-refresh"
-                     size="mini"
-                     @click="resetData">重置</el-button>
-        </el-row>
+        <!-- 工具条 -->
+        <div class="tools-div">
+          <el-row style="display:flex">
+            <el-button type="primary"
+                       icon="el-icon-search"
+                       size="mini"
+                       :loading="loading"
+                       @click="fetchData()">搜索</el-button>
+            <el-button icon="el-icon-refresh"
+                       size="mini"
+                       @click="resetData">重置</el-button>
+            <el-button type="success"
+                       icon="el-icon-plus"
+                       size="mini"
+                       @click="add">添 加</el-button>
+
+          </el-row>
+        </div>
       </el-form>
     </div>
     <!-- 表格 -->
@@ -74,6 +82,32 @@
                    style="padding: 30px 0; text-align: center;"
                    layout="total, prev, pager, next, jumper"
                    @current-change="fetchData" />
+    <el-dialog title="添加/修改"
+               :visible.sync="dialogVisible"
+               width="40%">
+      <el-form ref="dataForm"
+               :model="sysRole"
+               label-width="150px"
+               size="small"
+               style="padding-right: 40px;">
+        <el-form-item label="角色名称">
+          <el-input v-model="sysRole.roleName" />
+        </el-form-item>
+        <el-form-item label="角色编码">
+          <el-input v-model="sysRole.roleCode" />
+        </el-form-item>
+      </el-form>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="dialogVisible = false"
+                   size="small"
+                   icon="el-icon-refresh-right">取 消</el-button>
+        <el-button type="primary"
+                   icon="el-icon-check"
+                   @click="saveOrUpdate()"
+                   size="small">确 定</el-button>
+      </span>
+    </el-dialog>
 
   </div>
 </template>
@@ -90,7 +124,11 @@ export default {
       limit: 10,//每页显示记录数
       total: 0,//总记录数
       searchObj: {},// 查询条件
-      multipleSelection: []// 批量删除选中的记录列表
+      multipleSelection: [],// 批量删除选中的记录列表
+
+      dialogVisible: false,//是否弹框
+      sysRole: {},
+      saveBtnDisabled: false
     }
   },
   // 页面渲染成功后获取数据
@@ -99,6 +137,30 @@ export default {
   },
   // 定义方法
   methods: {
+    //点击弹出添加角色框
+    add () {
+      this.dialogVisible = true
+    },
+    saveOrUpdate () {
+      this.saveBtnDisabled = true // 防止表单重复提交
+      if (!this.sysRole.id) {
+        this.saveData()
+      } else {
+        this.updateData()
+      }
+    },
+
+    // 新增
+    saveData () {
+      api.save(this.sysRole).then(response => {
+        this.$message.success(response.message || '操作成功')
+        this.dialogVisible = false
+        this.fetchData(this.page)
+      })
+    },
+    updateData () {
+
+    },
     fetchData (current = 1) {
       this.page = current
       // 调用api
