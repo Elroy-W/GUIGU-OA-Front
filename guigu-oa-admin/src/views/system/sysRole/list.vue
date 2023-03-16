@@ -202,7 +202,7 @@ export default {
         // 点击确定，远程调用ajax
         return api.removeById(id)
       }).then((response) => {
-        this.fetchData(this.page)
+        this.fetchData()
         this.$message.success(response.message || '删除成功')
       })
     },// 当多选选项发生变化的时候调用
@@ -230,7 +230,7 @@ export default {
         // 调用api
         return api.batchRemove(idList)
       }).then((response) => {
-        this.fetchData(this.page)
+        this.fetchData()
         this.$message.success(response.message)
       })
     },
