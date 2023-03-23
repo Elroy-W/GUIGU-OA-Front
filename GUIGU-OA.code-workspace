@@ -4,5 +4,21 @@
       "path": "."
     }
   ],
-  "settings": {}
+  "settings": {
+    "sqltools.connections": [
+      {
+        "mysqlOptions": {
+          "authProtocol": "default"
+        },
+        "previewLimit": 5000,
+        "server": "localhost",
+        "port": 3306,
+        "driver": "MySQL",
+        "name": "localhost",
+        "username": "root",
+        "database": "guigu-oa",
+        "password": "54964442"
+      }
+    ]
+  }
 }

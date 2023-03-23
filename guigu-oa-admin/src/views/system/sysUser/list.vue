@@ -29,20 +29,18 @@
                      icon="el-icon-search"
                      size="mini"
                      :loading="loading"
-                     @click="fetchData()">搜索</el-button>
+                     @click="fetchData()"
+                     :disabled="$hasBP('bnt.sysUser.list')  === false">搜索</el-button>
           <el-button icon="el-icon-refresh"
                      size="mini"
                      @click="resetData">重置</el-button>
+          <el-button type="success"
+                     icon="el-icon-plus"
+                     size="mini"
+                     @click="add"
+                     :disabled="$hasBP('bnt.sysUser.add')  === false">添加</el-button>
         </el-row>
       </el-form>
-    </div>
-
-    <!-- 工具条 -->
-    <div class="tools-div">
-      <el-button type="success"
-                 icon="el-icon-plus"
-                 size="mini"
-                 @click="add">添 加</el-button>
     </div>
 
     <!-- 列表 -->
@@ -87,14 +85,14 @@
                        width="80">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.status === 1"
-                     @change="switchStatus(scope.row)">
+                     @change="switchStatus(scope.row)"
+                     :disabled="$hasBP('bnt.sysUser.update')  === false">
           </el-switch>
         </template>
       </el-table-column>
       <el-table-column prop="createTime"
                        label="创建时间"
                        width="160" />
-
       <el-table-column label="操作"
                        width="180"
                        align="center"
@@ -104,16 +102,19 @@
                      icon="el-icon-edit"
                      size="mini"
                      @click="edit(scope.row.id)"
+                     :disabled="$hasBP('bnt.sysUser.update')  === false"
                      title="修改" />
           <el-button type="danger"
                      icon="el-icon-delete"
                      size="mini"
                      @click="removeDataById(scope.row.id)"
+                     :disabled="$hasBP('bnt.sysUser.remove')  === false"
                      title="删除" />
           <el-button type="warning"
                      icon="el-icon-baseball"
                      size="mini"
                      @click="showAssignRole(scope.row)"
+                     :disabled="$hasBP('bnt.sysUser.assignRole')  === false"
                      title="分配角色" />
         </template>
       </el-table-column>

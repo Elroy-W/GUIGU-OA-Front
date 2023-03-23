@@ -20,17 +20,20 @@
                        icon="el-icon-search"
                        size="mini"
                        :loading="loading"
-                       @click="fetchData()">搜索</el-button>
+                       @click="fetchData()"
+                       :disabled="$hasBP('bnt.sysRole.list')  === false">搜索</el-button>
             <el-button icon="el-icon-refresh"
                        size="mini"
                        @click="resetData">重置</el-button>
             <el-button type="success"
                        icon="el-icon-plus"
                        size="mini"
-                       @click="add">添 加</el-button>
+                       @click="add"
+                       :disabled="$hasBP('bnt.sysRole.add')  === false">添 加</el-button>
             <el-button class="btn-add"
                        size="mini"
-                       @click="batchRemove()">批量删除</el-button>
+                       @click="batchRemove()"
+                       :disabled="$hasBP('bnt.sysRole.remove')  === false">批量删除</el-button>
 
           </el-row>
         </div>
@@ -69,15 +72,24 @@
                      icon="el-icon-edit"
                      size="mini"
                      @click="edit(scope.row.id)"
+                     :disabled="$hasBP('bnt.sysRole.update')  === false"
                      title="修改" />
           <el-button type="danger"
                      icon="el-icon-delete"
                      size="mini"
                      @click="removeDataById(scope.row.id)"
+                     :disabled="$hasBP('bnt.sysRole.remove')  === false"
                      title="删除" />
+          <el-button type="warning"
+                     icon="el-icon-baseball"
+                     size="mini"
+                     @click="showAssignAuth(scope.row)"
+                     :disabled="$hasBP('bnt.sysRole.assignAuth')  === false"
+                     title="分配权限" />
         </template>
       </el-table-column>
     </el-table>
+
     <!-- 分页组件 -->
     <el-pagination :current-page="page"
                    :total="total"
@@ -143,6 +155,7 @@ export default {
   },
   // 定义方法
   methods: {
+
     edit (id) {
       this.dialogVisible = true
       this.fetchDataById(id)
@@ -236,7 +249,10 @@ export default {
     },
     resetData () {
       this.fetchData(this.page)
-    }
+    },
+    showAssignAuth (row) {
+      this.$router.push('/system/assignAuth?id=' + row.id + '&roleName=' + row.roleName);
+    },
 
   }
 }
