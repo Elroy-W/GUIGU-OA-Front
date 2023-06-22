@@ -29,14 +29,14 @@ const mutations = {
     state.avatar = avatar
   },
 
-   SET_BUTTONS: (state, buttons) => {
+  // 新增
+  SET_BUTTONS: (state, buttons) => {
     state.buttons = buttons
   },
-
+  // 新增
   SET_MENUS: (state, menus) => {
     state.menus = menus
   }
-
 }
 
 const actions = {
@@ -55,29 +55,29 @@ const actions = {
     })
   },
 
-  // get user info
-  getInfo({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
+// get user info
+getInfo({ commit, state }) {
+  return new Promise((resolve, reject) => {
+    getInfo().then(response => {
+      const { data } = response
 
-        if (!data) {
-          return reject('Verification failed, please Login again.')
-        }
+      if (!data) {
+        return reject('Verification failed, please Login again.')
+      }
 
-        const { name, avatar } = data
+      const { name, avatar } = data
 
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit("SET_BUTTONS", data.buttons)
-        commit("SET_MENUS", data.routers)
-        resolve(data)
-      }).catch(error => {
-        reject(error)
-      })
+      commit('SET_NAME', name)
+      commit('SET_AVATAR', avatar)
+
+      commit("SET_BUTTONS", data.buttons)
+      commit("SET_MENUS", data.routers)
+      resolve(data)
+    }).catch(error => {
+      reject(error)
     })
-  },
-
+  })
+},
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
