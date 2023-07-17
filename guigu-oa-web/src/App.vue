@@ -39,7 +39,7 @@ export default {
 
   created () {
     // 处理微信授权登录
-    // this.wechatLogin();
+    this.wechatLogin();
   },
 
   methods: {
@@ -60,7 +60,7 @@ export default {
         token = window.localStorage.getItem('token') || '';
         if (token == '') {
           let url = window.location.href.replace('#', 'guiguoa')
-          window.location = 'http://oa.atguigu.cn/admin/wechat/authorize?returnUrl=' + url
+          window.location = 'http://guigu.viphk.91tunnel.com/admin/wechat/authorize?returnUrl=' + url
         }
       }
     },
@@ -73,7 +73,7 @@ export default {
       userInfoApi.bindPhone(this.bindPhoneVo).then(response => {
         window.localStorage.setItem('token', response.data);
         this.dialogVisible = false
-        window.location = 'http://oa.atguigu.cn'
+        window.location = 'http://guigu.viphk.91tunnel.com/'
       })
     },
 

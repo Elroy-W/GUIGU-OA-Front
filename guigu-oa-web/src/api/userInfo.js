@@ -17,4 +17,12 @@ export default {
       method: 'get'
     })
   },
+
+  bindPhone(bindPhoneVo) {
+    return request({
+      url: `/admin/wechat/bindPhone`,
+      method: 'post',
+      data: bindPhoneVo
+    })
+  },
 }
